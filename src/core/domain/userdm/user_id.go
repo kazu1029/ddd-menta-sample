@@ -9,7 +9,7 @@ func NewUserID(userID uint32) (UserID, error) {
 		return UserID(0), xerrors.New("user_id must be more than 1")
 	}
 
-	return UserID(0), nil
+	return UserID(userID), nil
 }
 
 func (u UserID) Value() uint32 {

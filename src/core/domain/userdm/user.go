@@ -6,23 +6,30 @@ import (
 )
 
 type User struct {
-	id       UserID
-	userName string
-	email    vo.Email
-	password vo.Password
+	id               UserID
+	userName         string
+	email            vo.Email
+	password         vo.Password
+	isMentor         bool
+	selfIntroduction string
 }
 
 const (
-	userNameMaxLength = 255
+	userNameMaxLength         = 255
+	selfIntroductionMaxLength = 2000
 )
 
-func NewUser(userID UserID, userName string, email vo.Email, password vo.Password) (*User, error) {
+func NewUser(userID UserID, userName string, email vo.Email, password vo.Password, selfIntroduction string) (*User, error) {
 	if userName == "" {
 		return nil, xerrors.New("user_name must be set")
 	}
 
 	if len(userName) > 255 {
 		return nil, xerrors.Errorf("user_name must be less than %d, %s", userNameMaxLength, userName)
+	}
+
+	if len(selfIntroduction) > selfIntroductionMaxLength {
+		return nil, xerrors.Errorf("self_introduction must be less than %d, %s", selfIntroductionMaxLength, selfIntroduction)
 	}
 
 	return &User{
