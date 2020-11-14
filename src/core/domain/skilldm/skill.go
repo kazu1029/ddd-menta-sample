@@ -1,9 +1,13 @@
 package skilldm
 
-import "golang.org/x/xerrors"
+import (
+	"github.com/kazu1029/ddd-menta-sample/src/core/domain/vo"
+	"golang.org/x/xerrors"
+)
 
 type Skill struct {
 	id                SkillID
+	ownerID           vo.UserID
 	name              string
 	yearsOfExperience YearsOfExperience
 }
@@ -12,7 +16,7 @@ const (
 	nameMaxLength = 20
 )
 
-func NewSkill(skillID SkillID, name string, yearsOfExperience YearsOfExperience) (*Skill, error) {
+func NewSkill(skillID SkillID, ownerID vo.UserID, name string, yearsOfExperience YearsOfExperience) (*Skill, error) {
 	if name == "" {
 		return nil, xerrors.New("name must be set")
 	}
@@ -23,6 +27,7 @@ func NewSkill(skillID SkillID, name string, yearsOfExperience YearsOfExperience)
 
 	return &Skill{
 		id:                skillID,
+		ownerID:           ownerID,
 		name:              name,
 		yearsOfExperience: yearsOfExperience,
 	}, nil

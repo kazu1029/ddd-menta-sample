@@ -12,6 +12,18 @@ func NewSkillID(skillID uint32) (SkillID, error) {
 	return SkillID(skillID), nil
 }
 
+func NewSkillIDs(skillIDs []uint32) ([]SkillID, error) {
+	var ids []SkillID
+	for _, s := range skillIDs {
+		skillID, err := NewSkillID(s)
+		if err != nil {
+			return nil, err
+		}
+		ids = append(ids, skillID)
+	}
+	return ids, nil
+}
+
 func (s SkillID) Value() uint32 {
 	return uint32(s)
 }

@@ -1,4 +1,4 @@
-package userdm
+package vo
 
 import "golang.org/x/xerrors"
 

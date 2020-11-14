@@ -6,7 +6,7 @@ import (
 )
 
 type User struct {
-	id               UserID
+	id               vo.UserID
 	userName         string
 	email            vo.Email
 	password         vo.Password
@@ -19,7 +19,7 @@ const (
 	selfIntroductionMaxLength = 2000
 )
 
-func NewUser(userID UserID, userName string, email vo.Email, password vo.Password, selfIntroduction string) (*User, error) {
+func NewUser(userID vo.UserID, userName string, email vo.Email, password vo.Password, selfIntroduction string) (*User, error) {
 	if userName == "" {
 		return nil, xerrors.New("user_name must be set")
 	}
@@ -28,7 +28,8 @@ func NewUser(userID UserID, userName string, email vo.Email, password vo.Passwor
 		return nil, xerrors.Errorf("user_name must be less than %d, %s", userNameMaxLength, userName)
 	}
 
-	if len(selfIntroduction) > selfIntroductionMaxLength {
+	// Check if selfIntroduction is inputted
+	if selfIntroduction != "" && len(selfIntroduction) > selfIntroductionMaxLength {
 		return nil, xerrors.Errorf("self_introduction must be less than %d, %s", selfIntroductionMaxLength, selfIntroduction)
 	}
 
@@ -40,7 +41,7 @@ func NewUser(userID UserID, userName string, email vo.Email, password vo.Passwor
 	}, nil
 }
 
-func (u *User) ID() UserID {
+func (u *User) ID() vo.UserID {
 	return u.id
 }
 
