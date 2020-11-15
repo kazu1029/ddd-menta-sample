@@ -1,19 +1,25 @@
 package vo
 
-import "golang.org/x/xerrors"
+import (
+	"github.com/google/uuid"
+	"golang.org/x/xerrors"
+)
 
-type UserID uint32
+type UserID string
 
-func NewUserID(userID uint32) (UserID, error) {
-	if userID < 0 {
-		return UserID(0), xerrors.New("user_id must be more than 1")
-	}
-
-	return UserID(userID), nil
+func NewUserID() UserID {
+	return UserID(uuid.New().String())
 }
 
-func (u UserID) Value() uint32 {
-	return uint32(u)
+func NewUserIDWithStr(id string) (UserID, error) {
+	if id == "" {
+		return "", xerrors.New("user id must be not empty")
+	}
+	return UserID(id), nil
+}
+
+func (u UserID) Value() string {
+	return string(u)
 }
 
 func (uID UserID) Equals(uID2 UserID) bool {

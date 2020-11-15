@@ -10,8 +10,8 @@ type User struct {
 	userName         string
 	email            vo.Email
 	password         vo.Password
-	isMentor         bool
 	selfIntroduction string
+	skillIDs         []vo.TagID
 }
 
 const (
@@ -19,7 +19,7 @@ const (
 	selfIntroductionMaxLength = 2000
 )
 
-func NewUser(userID vo.UserID, userName string, email vo.Email, password vo.Password, selfIntroduction string) (*User, error) {
+func NewUser(userID vo.UserID, userName string, email vo.Email, password vo.Password, selfIntroduction string, skillIDs []vo.TagID) (*User, error) {
 	if userName == "" {
 		return nil, xerrors.New("user_name must be set")
 	}
@@ -33,11 +33,18 @@ func NewUser(userID vo.UserID, userName string, email vo.Email, password vo.Pass
 		return nil, xerrors.Errorf("self_introduction must be less than %d, %s", selfIntroductionMaxLength, selfIntroduction)
 	}
 
+	if len(skillIDs) == 0 {
+		return nil, xerrors.New("skillIDs must have more than one")
+	}
+
+	// TODO: Check if work experiences is valid when inputted
+
 	return &User{
 		id:       userID,
 		userName: userName,
 		email:    email,
 		password: password,
+		skillIDs: skillIDs,
 	}, nil
 }
 
@@ -55,6 +62,14 @@ func (u *User) Email() vo.Email {
 
 func (u *User) Password() vo.Password {
 	return u.password
+}
+
+func (u *User) SelfIntroduction() string {
+	return u.selfIntroduction
+}
+
+func (u *User) SkillIDs() []vo.TagID {
+	return u.skillIDs
 }
 
 func (u *User) Equals(u2 *User) bool {

@@ -2,7 +2,6 @@ package userapp
 
 import (
 	"github.com/kazu1029/ddd-menta-sample/src/core/domain/userdm"
-	"github.com/kazu1029/ddd-menta-sample/src/core/domain/vo"
 )
 
 type UpdateUserApp struct {
@@ -33,20 +32,22 @@ type UpdateUserResponse struct {
 }
 
 func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, error) {
-	userID, err := vo.NewUserID(req.ID)
-	if err != nil {
-		return nil, err
-	}
-	user, err := app.userRepo.FindByID(userID)
-	if err != nil {
-		return nil, err
-	}
-	email, err := vo.NewEmail(req.Email)
-	if err != nil {
-		return nil, err
-	}
-	password, err := vo.NewPassword(req.Password)
-	if err != nil {
-		return nil, err
-	}
+	// userID, err := vo.NewUserID(req.ID)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// user, err := app.userRepo.FindByID(userID)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// email, err := vo.NewEmail(req.Email)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// password, err := vo.NewPassword(req.Password)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	return nil, nil
 }

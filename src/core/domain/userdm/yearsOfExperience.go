@@ -1,4 +1,4 @@
-package skilldm
+package userdm
 
 import "golang.org/x/xerrors"
 

@@ -19,15 +19,14 @@ func (repo *UserRepoImpl) FindByID(userID vo.UserID) (*userdm.User, error) {
 	return nil, nil
 }
 
-func (repo *UserRepoImpl) GetLastID() (vo.UserID, error) {
-	usersCount := len(users)
-	if usersCount == 0 {
-		return 1, nil
-	}
-	lastUser := users[usersCount-1]
-	return lastUser.ID(), nil
-}
-
 func (repo *UserRepoImpl) Create(user userdm.User) (*userdm.User, error) {
-	return nil, nil
+	// This is sample implementation
+	u, err := userdm.NewUser(user.ID(), user.UserName(), user.Email(), user.Password(), user.SelfIntroduction(), user.SkillIDs())
+	if err != nil {
+		return nil, err
+	}
+	users = append(users, u)
+
+	lastInsertedUser := users[len(users)-1]
+	return lastInsertedUser, nil
 }
