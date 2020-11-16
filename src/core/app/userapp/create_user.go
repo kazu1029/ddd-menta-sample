@@ -24,11 +24,18 @@ type CreateUserRequest struct {
 	Password         string
 	SelfIntroduction string
 	Skills           []CreateUserSkillRequset
+	WorkExperiences  []CreateUserWorkExperienceRequest
 }
 
 type CreateUserSkillRequset struct {
 	ID                string
 	YearsOfExperience int
+}
+
+type CreateUserWorkExperienceRequest struct {
+	Description string
+	YearFrom    int
+	YearTo      int
 }
 
 type CreateUserResponse struct {
@@ -59,7 +66,38 @@ func (app *CreateUserApp) Exec(req *CreateUserRequest) (*CreateUserResponse, err
 		return nil, err
 	}
 
-	user, err := userdm.NewUser(userID, req.UserName, email, password, req.SelfIntroduction, skillIDs)
+	// This might be user_domain_service logic
+	var workExperiences []userdm.UserWorkExperience
+	var workExperienceIDs []userdm.WorkExperienceID
+	if len(req.WorkExperiences) > 0 {
+		for _, we := range req.WorkExperiences {
+			workExperienceID := userdm.NewWorkExperienceID()
+			workExperienceIDs = append(workExperienceIDs, workExperienceID)
+			yearFrom, err := userdm.NewYearFrom(we.YearFrom)
+			if err != nil {
+				return nil, err
+			}
+			yearTo, err := userdm.NewYearTo(yearFrom.Value(), we.YearTo)
+			if err != nil {
+				return nil, err
+			}
+			experience, err := userdm.NewUserWorkExperience(
+				workExperienceID,
+				userID,
+				we.Description,
+				yearFrom,
+				yearTo,
+			)
+			if err != nil {
+				return nil, err
+			}
+			workExperiences = append(workExperiences, *experience)
+		}
+	}
+
+	user, err := userdm.NewUser(
+		userID, req.UserName, email, password, req.SelfIntroduction, skillIDs, workExperienceIDs,
+	)
 	if err != nil {
 		return nil, err
 	}

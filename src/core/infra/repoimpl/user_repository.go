@@ -21,7 +21,7 @@ func (repo *UserRepoImpl) FindByID(userID vo.UserID) (*userdm.User, error) {
 
 func (repo *UserRepoImpl) Create(user userdm.User) (*userdm.User, error) {
 	// This is sample implementation
-	u, err := userdm.NewUser(user.ID(), user.UserName(), user.Email(), user.Password(), user.SelfIntroduction(), user.SkillIDs())
+	u, err := userdm.NewUser(user.ID(), user.UserName(), user.Email(), user.Password(), user.SelfIntroduction(), user.SkillIDs(), user.WorkExperienceIDs())
 	if err != nil {
 		return nil, err
 	}

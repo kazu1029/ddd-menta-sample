@@ -6,25 +6,27 @@ import (
 )
 
 type User struct {
-	id               vo.UserID
-	userName         string
-	email            vo.Email
-	password         vo.Password
-	selfIntroduction string
-	skillIDs         []vo.TagID
+	id                vo.UserID
+	userName          string
+	email             vo.Email
+	password          vo.Password
+	selfIntroduction  string
+	skillIDs          []vo.TagID
+	workExperienceIDs []WorkExperienceID
 }
 
 const (
 	userNameMaxLength         = 255
 	selfIntroductionMaxLength = 2000
+	skillIDsMinLength         = 0
 )
 
-func NewUser(userID vo.UserID, userName string, email vo.Email, password vo.Password, selfIntroduction string, skillIDs []vo.TagID) (*User, error) {
+func NewUser(userID vo.UserID, userName string, email vo.Email, password vo.Password, selfIntroduction string, skillIDs []vo.TagID, workExperienceIDs []WorkExperienceID) (*User, error) {
 	if userName == "" {
 		return nil, xerrors.New("user_name must be set")
 	}
 
-	if len(userName) > 255 {
+	if len(userName) > userNameMaxLength {
 		return nil, xerrors.Errorf("user_name must be less than %d, %s", userNameMaxLength, userName)
 	}
 
@@ -33,18 +35,17 @@ func NewUser(userID vo.UserID, userName string, email vo.Email, password vo.Pass
 		return nil, xerrors.Errorf("self_introduction must be less than %d, %s", selfIntroductionMaxLength, selfIntroduction)
 	}
 
-	if len(skillIDs) == 0 {
+	if len(skillIDs) == skillIDsMinLength {
 		return nil, xerrors.New("skillIDs must have more than one")
 	}
 
-	// TODO: Check if work experiences is valid when inputted
-
 	return &User{
-		id:       userID,
-		userName: userName,
-		email:    email,
-		password: password,
-		skillIDs: skillIDs,
+		id:                userID,
+		userName:          userName,
+		email:             email,
+		password:          password,
+		skillIDs:          skillIDs,
+		workExperienceIDs: workExperienceIDs,
 	}, nil
 }
 
@@ -70,6 +71,10 @@ func (u *User) SelfIntroduction() string {
 
 func (u *User) SkillIDs() []vo.TagID {
 	return u.skillIDs
+}
+
+func (u *User) WorkExperienceIDs() []WorkExperienceID {
+	return u.workExperienceIDs
 }
 
 func (u *User) Equals(u2 *User) bool {
