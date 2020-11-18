@@ -2,7 +2,6 @@ package repoimpl
 
 import (
 	"github.com/kazu1029/ddd-menta-sample/src/core/domain/userdm"
-	"github.com/kazu1029/ddd-menta-sample/src/core/domain/vo"
 )
 
 type UserRepoImpl struct{}
@@ -15,7 +14,7 @@ var (
 	users []*userdm.User = []*userdm.User{}
 )
 
-func (repo *UserRepoImpl) FindByID(userID vo.UserID) (*userdm.User, error) {
+func (repo *UserRepoImpl) FindByID(userID userdm.UserID) (*userdm.User, error) {
 	return nil, nil
 }
 

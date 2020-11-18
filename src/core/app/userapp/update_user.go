@@ -41,7 +41,7 @@ type UpdateUserResponse struct {
 }
 
 func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, error) {
-	userID, err := vo.NewUserIDWithStr(req.ID)
+	userID, err := userdm.NewUserIDWithStr(req.ID)
 	if err != nil {
 		return nil, err
 	}

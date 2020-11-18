@@ -1,14 +1,14 @@
 package userdm
 
-import "github.com/kazu1029/ddd-menta-sample/src/core/domain/vo"
+import "github.com/kazu1029/ddd-menta-sample/src/core/domain/tagdm"
 
 type UserSkill struct {
-	id                vo.TagID
-	ownerID           vo.UserID
+	id                tagdm.TagID
+	ownerID           UserID
 	yearsOfExperience YearsOfExperience
 }
 
-func NewUserSkill(skillID vo.TagID, ownerID vo.UserID, yearsOfExperience YearsOfExperience) (*UserSkill, error) {
+func NewUserSkill(skillID tagdm.TagID, ownerID UserID, yearsOfExperience YearsOfExperience) (*UserSkill, error) {
 	return &UserSkill{
 		id:                skillID,
 		ownerID:           ownerID,
@@ -16,11 +16,11 @@ func NewUserSkill(skillID vo.TagID, ownerID vo.UserID, yearsOfExperience YearsOf
 	}, nil
 }
 
-func (s *UserSkill) ID() vo.TagID {
+func (s *UserSkill) ID() tagdm.TagID {
 	return s.id
 }
 
-func (s *UserSkill) OwnerID() vo.UserID {
+func (s *UserSkill) OwnerID() UserID {
 	return s.ownerID
 }
 

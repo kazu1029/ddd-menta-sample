@@ -1,4 +1,4 @@
-package vo
+package userdm
 
 import (
 	"github.com/google/uuid"

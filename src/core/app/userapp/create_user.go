@@ -34,8 +34,8 @@ type CreateUserSkillRequset struct {
 
 type CreateUserWorkExperienceRequest struct {
 	Description string
-	YearFrom    int
-	YearTo      int
+	YearFrom    uint
+	YearTo      uint
 }
 
 type CreateUserResponse struct {
@@ -51,13 +51,13 @@ func (app *CreateUserApp) Exec(req *CreateUserRequest) (*CreateUserResponse, err
 	if err != nil {
 		return nil, err
 	}
-	userID := vo.NewUserID()
+	userID := userdm.NewUserID()
 
 	var userSkillIDs []string
 	for _, skill := range req.Skills {
 		userSkillIDs = append(userSkillIDs, skill.ID)
 	}
-	skillIDs, err := vo.NewTagIDs(userSkillIDs)
+	skillIDs, err := tagdm.NewTagIDs(userSkillIDs)
 	if err != nil {
 		return nil, err
 	}

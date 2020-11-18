@@ -1,17 +1,20 @@
 package userdm
 
 import (
+	"unicode/utf8"
+
+	"github.com/kazu1029/ddd-menta-sample/src/core/domain/tagdm"
 	"github.com/kazu1029/ddd-menta-sample/src/core/domain/vo"
 	"golang.org/x/xerrors"
 )
 
 type User struct {
-	id                vo.UserID
+	id                UserID
 	userName          string
 	email             vo.Email
 	password          vo.Password
 	selfIntroduction  string
-	skillIDs          []vo.TagID
+	skillIDs          []tagdm.TagID
 	workExperienceIDs []WorkExperienceID
 }
 
@@ -21,12 +24,12 @@ const (
 	skillIDsMinLength         = 0
 )
 
-func NewUser(userID vo.UserID, userName string, email vo.Email, password vo.Password, selfIntroduction string, skillIDs []vo.TagID, workExperienceIDs []WorkExperienceID) (*User, error) {
+func NewUser(userID UserID, userName string, email vo.Email, password vo.Password, selfIntroduction string, skillIDs []tagdm.TagID, workExperienceIDs []WorkExperienceID) (*User, error) {
 	if userName == "" {
 		return nil, xerrors.New("user_name must be set")
 	}
 
-	if len(userName) > userNameMaxLength {
+	if utf8.RuneCountInString(userName) > userNameMaxLength {
 		return nil, xerrors.Errorf("user_name must be less than %d, %s", userNameMaxLength, userName)
 	}
 
@@ -49,7 +52,7 @@ func NewUser(userID vo.UserID, userName string, email vo.Email, password vo.Pass
 	}, nil
 }
 
-func (u *User) ID() vo.UserID {
+func (u *User) ID() UserID {
 	return u.id
 }
 
@@ -69,7 +72,7 @@ func (u *User) SelfIntroduction() string {
 	return u.selfIntroduction
 }
 
-func (u *User) SkillIDs() []vo.TagID {
+func (u *User) SkillIDs() []tagdm.TagID {
 	return u.skillIDs
 }
 

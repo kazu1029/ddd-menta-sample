@@ -2,13 +2,13 @@ package userdm
 
 import "golang.org/x/xerrors"
 
-type YearTo int
+type YearTo uint
 
 const (
 	yearToMin = 1970
 )
 
-func NewYearTo(yearFrom, yearTo int) (YearTo, error) {
+func NewYearTo(yearFrom, yearTo uint) (YearTo, error) {
 	if yearTo == 0 {
 		return YearTo(0), xerrors.New("year to must be not be zero")
 	}
@@ -21,8 +21,8 @@ func NewYearTo(yearFrom, yearTo int) (YearTo, error) {
 	return YearTo(yearTo), nil
 }
 
-func (y YearTo) Value() int {
-	return int(y)
+func (y YearTo) Value() uint {
+	return uint(y)
 }
 
 func (y1 YearTo) Equals(y2 YearTo) bool {

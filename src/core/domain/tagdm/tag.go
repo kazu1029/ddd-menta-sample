@@ -1,12 +1,13 @@
 package tagdm
 
 import (
-	"github.com/kazu1029/ddd-menta-sample/src/core/domain/vo"
+	"unicode/utf8"
+
 	"golang.org/x/xerrors"
 )
 
 type Tag struct {
-	id   vo.TagID
+	id   TagID
 	name string
 }
 
@@ -14,12 +15,12 @@ const (
 	nameMaxLength = 20
 )
 
-func NewTag(tagID vo.TagID, name string) (*Tag, error) {
+func NewTag(tagID TagID, name string) (*Tag, error) {
 	if name == "" {
 		return nil, xerrors.New("name must be set")
 	}
 
-	if len(name) > nameMaxLength {
+	if utf8.RuneCountInString(name) > nameMaxLength {
 		return nil, xerrors.Errorf("name must be less than %d, %s", nameMaxLength, name)
 	}
 
@@ -29,7 +30,7 @@ func NewTag(tagID vo.TagID, name string) (*Tag, error) {
 	}, nil
 }
 
-func (s *Tag) ID() vo.TagID {
+func (s *Tag) ID() TagID {
 	return s.id
 }
 
