@@ -4,6 +4,7 @@ import (
 	"github.com/kazu1029/ddd-menta-sample/src/core/domain/tagdm"
 	"github.com/kazu1029/ddd-menta-sample/src/core/domain/userdm"
 	"github.com/kazu1029/ddd-menta-sample/src/core/domain/vo"
+	"golang.org/x/xerrors"
 )
 
 type CreateUserApp struct {
@@ -57,22 +58,33 @@ func (app *CreateUserApp) Exec(req *CreateUserRequest) (*CreateUserResponse, err
 	for _, skill := range req.Skills {
 		userSkillIDs = append(userSkillIDs, skill.ID)
 	}
-	skillIDs, err := tagdm.NewTagIDs(userSkillIDs)
-	if err != nil {
-		return nil, err
-	}
+
 	tagDomainService := tagdm.NewTagDomainService(app.tagRepo)
-	if ok := tagDomainService.ExistsWithIDs(skillIDs); !ok {
-		return nil, err
+	var userSkills []*userdm.UserSkill
+	for _, skill := range req.Skills {
+		tagID, err := tagdm.NewTagIDWithStr(skill.ID)
+		if err != nil {
+			return nil, err
+		}
+		if ok := tagDomainService.Exists(tagID); !ok {
+			return nil, xerrors.Errorf("invalid skill id, %d", skill.ID)
+		}
+		yoe, err := userdm.NewYearsOfExperience(userdm.YearsOfExperience(skill.YearsOfExperience))
+		if err != nil {
+			return nil, err
+		}
+		us, err := userdm.NewUserSkill(tagID, userID, yoe)
+		if err != nil {
+			return nil, err
+		}
+		userSkills = append(userSkills, us)
 	}
 
 	// This might be user_domain_service logic
-	var workExperiences []userdm.UserWorkExperience
-	var workExperienceIDs []userdm.WorkExperienceID
+	var workExperiences []*userdm.UserWorkExperience
 	if len(req.WorkExperiences) > 0 {
 		for _, we := range req.WorkExperiences {
 			workExperienceID := userdm.NewWorkExperienceID()
-			workExperienceIDs = append(workExperienceIDs, workExperienceID)
 			yearFrom, err := userdm.NewYearFrom(we.YearFrom)
 			if err != nil {
 				return nil, err
@@ -91,12 +103,12 @@ func (app *CreateUserApp) Exec(req *CreateUserRequest) (*CreateUserResponse, err
 			if err != nil {
 				return nil, err
 			}
-			workExperiences = append(workExperiences, *experience)
+			workExperiences = append(workExperiences, experience)
 		}
 	}
 
 	user, err := userdm.NewUser(
-		userID, req.UserName, email, password, req.SelfIntroduction, skillIDs, workExperienceIDs,
+		userID, req.UserName, email, password, req.SelfIntroduction, userSkills, workExperiences,
 	)
 	if err != nil {
 		return nil, err

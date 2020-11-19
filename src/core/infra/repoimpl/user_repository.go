@@ -20,7 +20,7 @@ func (repo *UserRepoImpl) FindByID(userID userdm.UserID) (*userdm.User, error) {
 
 func (repo *UserRepoImpl) Create(user userdm.User) (*userdm.User, error) {
 	// This is sample implementation
-	u, err := userdm.NewUser(user.ID(), user.UserName(), user.Email(), user.Password(), user.SelfIntroduction(), user.SkillIDs(), user.WorkExperienceIDs())
+	u, err := userdm.NewUser(user.ID(), user.UserName(), user.Email(), user.Password(), user.SelfIntroduction(), user.Skills(), user.WorkExperiences())
 	if err != nil {
 		return nil, err
 	}

@@ -3,28 +3,27 @@ package userdm
 import (
 	"unicode/utf8"
 
-	"github.com/kazu1029/ddd-menta-sample/src/core/domain/tagdm"
 	"github.com/kazu1029/ddd-menta-sample/src/core/domain/vo"
 	"golang.org/x/xerrors"
 )
 
 type User struct {
-	id                UserID
-	userName          string
-	email             vo.Email
-	password          vo.Password
-	selfIntroduction  string
-	skillIDs          []tagdm.TagID
-	workExperienceIDs []WorkExperienceID
+	id               UserID
+	userName         string
+	email            vo.Email
+	password         vo.Password
+	selfIntroduction string
+	skills           []*UserSkill
+	workExperiences  []*UserWorkExperience
 }
 
 const (
 	userNameMaxLength         = 255
 	selfIntroductionMaxLength = 2000
-	skillIDsMinLength         = 0
+	skillsMinLength           = 0
 )
 
-func NewUser(userID UserID, userName string, email vo.Email, password vo.Password, selfIntroduction string, skillIDs []tagdm.TagID, workExperienceIDs []WorkExperienceID) (*User, error) {
+func NewUser(userID UserID, userName string, email vo.Email, password vo.Password, selfIntroduction string, skills []*UserSkill, workExperiences []*UserWorkExperience) (*User, error) {
 	if userName == "" {
 		return nil, xerrors.New("user_name must be set")
 	}
@@ -38,17 +37,17 @@ func NewUser(userID UserID, userName string, email vo.Email, password vo.Passwor
 		return nil, xerrors.Errorf("self_introduction must be less than %d, %s", selfIntroductionMaxLength, selfIntroduction)
 	}
 
-	if len(skillIDs) == skillIDsMinLength {
+	if len(skills) == skillsMinLength {
 		return nil, xerrors.New("skillIDs must have more than one")
 	}
 
 	return &User{
-		id:                userID,
-		userName:          userName,
-		email:             email,
-		password:          password,
-		skillIDs:          skillIDs,
-		workExperienceIDs: workExperienceIDs,
+		id:              userID,
+		userName:        userName,
+		email:           email,
+		password:        password,
+		skills:          skills,
+		workExperiences: workExperiences,
 	}, nil
 }
 
@@ -72,12 +71,12 @@ func (u *User) SelfIntroduction() string {
 	return u.selfIntroduction
 }
 
-func (u *User) SkillIDs() []tagdm.TagID {
-	return u.skillIDs
+func (u *User) Skills() []*UserSkill {
+	return u.skills
 }
 
-func (u *User) WorkExperienceIDs() []WorkExperienceID {
-	return u.workExperienceIDs
+func (u *User) WorkExperiences() []*UserWorkExperience {
+	return u.workExperiences
 }
 
 func (u *User) Equals(u2 *User) bool {
