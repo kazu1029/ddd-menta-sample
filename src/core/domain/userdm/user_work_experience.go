@@ -17,8 +17,8 @@ const (
 )
 
 func NewUserWorkExperience(id WorkExperienceID, ownerID UserID, description string, yearFrom YearFrom, yearTo YearTo) (*UserWorkExperience, error) {
-	if len(description) > descriptionMaxLength {
-		return nil, xerrors.New("description must be less than 1000")
+	if err := descriptionValidation(description); err != nil {
+		return nil, err
 	}
 	return &UserWorkExperience{
 		id:          id,
@@ -27,6 +27,13 @@ func NewUserWorkExperience(id WorkExperienceID, ownerID UserID, description stri
 		yearFrom:    yearFrom,
 		yearTo:      yearTo,
 	}, nil
+}
+
+func descriptionValidation(description string) error {
+	if len(description) > descriptionMaxLength {
+		return xerrors.New("description must be less than 1000")
+	}
+	return nil
 }
 
 func (we *UserWorkExperience) ID() WorkExperienceID {

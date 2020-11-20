@@ -24,21 +24,16 @@ const (
 )
 
 func NewUser(userID UserID, userName string, email vo.Email, password vo.Password, selfIntroduction string, skills []*UserSkill, workExperiences []*UserWorkExperience) (*User, error) {
-	if userName == "" {
-		return nil, xerrors.New("user_name must be set")
+	if err := userNameValidation(userName); err != nil {
+		return nil, err
 	}
 
-	if utf8.RuneCountInString(userName) > userNameMaxLength {
-		return nil, xerrors.Errorf("user_name must be less than %d, %s", userNameMaxLength, userName)
+	if err := selfIntroductionValidation(selfIntroduction); err != nil {
+		return nil, err
 	}
 
-	// Check if selfIntroduction is inputted
-	if selfIntroduction != "" && len(selfIntroduction) > selfIntroductionMaxLength {
-		return nil, xerrors.Errorf("self_introduction must be less than %d, %s", selfIntroductionMaxLength, selfIntroduction)
-	}
-
-	if len(skills) == skillsMinLength {
-		return nil, xerrors.New("skillIDs must have more than one")
+	if err := skillsValidation(skills); err != nil {
+		return nil, err
 	}
 
 	return &User{
@@ -49,6 +44,33 @@ func NewUser(userID UserID, userName string, email vo.Email, password vo.Passwor
 		skills:          skills,
 		workExperiences: workExperiences,
 	}, nil
+}
+
+func userNameValidation(userName string) error {
+	if userName == "" {
+		return xerrors.New("user_name must be set")
+	}
+
+	if utf8.RuneCountInString(userName) > userNameMaxLength {
+		return xerrors.Errorf("user_name must be less than %d, %s", userNameMaxLength, userName)
+	}
+
+	return nil
+}
+
+func selfIntroductionValidation(selfIntroduction string) error {
+	// Check if selfIntroduction is inputted
+	if selfIntroduction != "" && len(selfIntroduction) > selfIntroductionMaxLength {
+		return xerrors.Errorf("self_introduction must be less than %d, %s", selfIntroductionMaxLength, selfIntroduction)
+	}
+	return nil
+}
+
+func skillsValidation(skills []*UserSkill) error {
+	if len(skills) == skillsMinLength {
+		return xerrors.New("skillIDs must have more than one")
+	}
+	return nil
 }
 
 func (u *User) ID() UserID {
@@ -81,4 +103,43 @@ func (u *User) WorkExperiences() []*UserWorkExperience {
 
 func (u *User) Equals(u2 *User) bool {
 	return u.id.Equals(u2.id)
+}
+
+func (u *User) ChangeEmail(email vo.Email) error {
+	u.email = email
+	return nil
+}
+
+func (u *User) ChangePassword(password vo.Password) error {
+	u.password = password
+	return nil
+}
+
+func (u *User) ChangeUserName(userName string) error {
+	if err := userNameValidation(userName); err != nil {
+		return err
+	}
+	u.userName = userName
+	return nil
+}
+
+func (u *User) ChangeSelfIntroduction(selfIntroduction string) error {
+	if err := selfIntroductionValidation(selfIntroduction); err != nil {
+		return err
+	}
+	u.selfIntroduction = selfIntroduction
+	return nil
+}
+
+func (u *User) ChangeSkills(skills []*UserSkill) error {
+	if err := skillsValidation(skills); err != nil {
+		return err
+	}
+	u.skills = skills
+	return nil
+}
+
+func (u *User) ChangeWorkExperiences(workExperiences []*UserWorkExperience) error {
+	u.workExperiences = workExperiences
+	return nil
 }

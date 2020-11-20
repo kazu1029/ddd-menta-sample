@@ -29,3 +29,14 @@ func (repo *UserRepoImpl) Create(user userdm.User) (*userdm.User, error) {
 	lastInsertedUser := users[len(users)-1]
 	return lastInsertedUser, nil
 }
+
+func (repo *UserRepoImpl) Update(user userdm.User) (*userdm.User, error) {
+	// TODO: Get target user from users
+
+	// TODO: Update user
+
+	// TODO: Update user skills
+
+	// TODO: Update user work experiences
+	return &user, nil
+}
