@@ -46,8 +46,20 @@ type UpdateUserResponse struct {
 	UserName         string
 	Email            string
 	SelfIntroduction string
-	// Skills         []string
-	// WorkExperiences
+	Skills           []UpdateUserSkillResponse
+	WorkExperiences  []UpdateUserWorkExperienceResponse
+}
+
+type UpdateUserSkillResponse struct {
+	ID                string
+	YearsOfExperience int
+}
+
+type UpdateUserWorkExperienceResponse struct {
+	ID          string
+	Description string
+	YearFrom    uint
+	YearTo      uint
 }
 
 func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, error) {
@@ -154,10 +166,32 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 		return nil, err
 	}
 
+	var skillsResponse []UpdateUserSkillResponse
+	for _, skill := range updatedUser.Skills() {
+		s := UpdateUserSkillResponse{
+			ID:                skill.ID().Value(),
+			YearsOfExperience: skill.YearsOfExperience().Value(),
+		}
+		skillsResponse = append(skillsResponse, s)
+	}
+
+	var workExperiences []UpdateUserWorkExperienceResponse
+	for _, we := range updatedUser.WorkExperiences() {
+		e := UpdateUserWorkExperienceResponse{
+			ID:          we.ID().Value(),
+			Description: we.Description().Value(),
+			YearFrom:    we.YearFrom().Value(),
+			YearTo:      we.YearTo().Value(),
+		}
+		workExperiences = append(workExperiences, e)
+	}
+
 	return &UpdateUserResponse{
 		ID:               updatedUser.ID().Value(),
 		Email:            updatedUser.Email().Value(),
 		UserName:         updatedUser.UserName(),
 		SelfIntroduction: updatedUser.SelfIntroduction(),
+		Skills:           skillsResponse,
+		WorkExperiences:  workExperiences,
 	}, nil
 }
