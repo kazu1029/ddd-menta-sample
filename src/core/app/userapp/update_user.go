@@ -175,15 +175,15 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 		skillsResponse = append(skillsResponse, s)
 	}
 
-	var workExperiences []UpdateUserWorkExperienceResponse
+	var workExperiencesResponse []UpdateUserWorkExperienceResponse
 	for _, we := range updatedUser.WorkExperiences() {
 		e := UpdateUserWorkExperienceResponse{
 			ID:          we.ID().Value(),
-			Description: we.Description().Value(),
+			Description: we.Description(),
 			YearFrom:    we.YearFrom().Value(),
 			YearTo:      we.YearTo().Value(),
 		}
-		workExperiences = append(workExperiences, e)
+		workExperiencesResponse = append(workExperiencesResponse, e)
 	}
 
 	return &UpdateUserResponse{
@@ -192,6 +192,6 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 		UserName:         updatedUser.UserName(),
 		SelfIntroduction: updatedUser.SelfIntroduction(),
 		Skills:           skillsResponse,
-		WorkExperiences:  workExperiences,
+		WorkExperiences:  workExperiencesResponse,
 	}, nil
 }

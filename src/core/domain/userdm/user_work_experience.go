@@ -47,3 +47,11 @@ func (we *UserWorkExperience) OwnerID() UserID {
 func (we *UserWorkExperience) Description() string {
 	return we.description
 }
+
+func (we *UserWorkExperience) YearFrom() YearFrom {
+	return we.yearFrom
+}
+
+func (we *UserWorkExperience) YearTo() YearTo {
+	return we.yearTo
+}
