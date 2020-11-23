@@ -105,14 +105,12 @@ func (u *User) Equals(u2 *User) bool {
 	return u.id.Equals(u2.id)
 }
 
-func (u *User) ChangeEmail(email vo.Email) error {
+func (u *User) ChangeEmail(email vo.Email) {
 	u.email = email
-	return nil
 }
 
-func (u *User) ChangePassword(password vo.Password) error {
+func (u *User) ChangePassword(password vo.Password) {
 	u.password = password
-	return nil
 }
 
 func (u *User) ChangeUserName(userName string) error {
@@ -139,7 +137,6 @@ func (u *User) ChangeSkills(skills []*UserSkill) error {
 	return nil
 }
 
-func (u *User) ChangeWorkExperiences(workExperiences []*UserWorkExperience) error {
+func (u *User) ChangeWorkExperiences(workExperiences []*UserWorkExperience) {
 	u.workExperiences = workExperiences
-	return nil
 }

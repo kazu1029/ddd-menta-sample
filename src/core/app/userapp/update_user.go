@@ -95,9 +95,18 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 		if err != nil {
 			return nil, err
 		}
-		us, err := userdm.NewUserSkill(tagID, userID, yoe)
+		var us *userdm.UserSkill
+		us, err = app.userRepo.FindSkillBySkillID(userID, tagID)
 		if err != nil {
 			return nil, err
+		}
+		if us == nil {
+			us, err = userdm.NewUserSkill(tagID, userID, yoe)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			us.ChangeYearsOfExperience(yoe)
 		}
 		userSkills = append(userSkills, us)
 	}
@@ -107,14 +116,8 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 		return nil, err
 	}
 
-	err = user.ChangeEmail(email)
-	if err != nil {
-		return nil, err
-	}
-	err = user.ChangePassword(password)
-	if err != nil {
-		return nil, err
-	}
+	user.ChangeEmail(email)
+	user.ChangePassword(password)
 	err = user.ChangeUserName(req.UserName)
 	if err != nil {
 		return nil, err
@@ -142,21 +145,35 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 			if err != nil {
 				return nil, err
 			}
-			experience, err := userdm.NewUserWorkExperience(
-				workExperienceID,
-				userID,
-				we.Description,
-				yearFrom,
-				yearTo,
-			)
+			var experience *userdm.UserWorkExperience
+			experience, err = app.userRepo.FindWorkExperienceByWorkExperienceID(userID, workExperienceID)
 			if err != nil {
 				return nil, err
+			}
+			if experience == nil {
+				experience, err = userdm.NewUserWorkExperience(
+					workExperienceID,
+					userID,
+					we.Description,
+					yearFrom,
+					yearTo,
+				)
+				if err != nil {
+					return nil, err
+				}
+			} else {
+				err = experience.ChangeDescription(we.Description)
+				if err != nil {
+					return nil, err
+				}
+				experience.ChangeYearFrom(yearFrom)
+				experience.ChangeYearTo(yearTo)
 			}
 			workExperiences = append(workExperiences, experience)
 		}
 	}
 
-	err = user.ChangeWorkExperiences(workExperiences)
+	user.ChangeWorkExperiences(workExperiences)
 	if err != nil {
 		return nil, err
 	}

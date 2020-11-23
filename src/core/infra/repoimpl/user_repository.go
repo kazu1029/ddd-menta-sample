@@ -1,6 +1,7 @@
 package repoimpl
 
 import (
+	"github.com/kazu1029/ddd-menta-sample/src/core/domain/tagdm"
 	"github.com/kazu1029/ddd-menta-sample/src/core/domain/userdm"
 )
 
@@ -15,6 +16,14 @@ var (
 )
 
 func (repo *UserRepoImpl) FindByID(userID userdm.UserID) (*userdm.User, error) {
+	return nil, nil
+}
+
+func (repo *UserRepoImpl) FindWorkExperienceByWorkExperienceID(workExperienceID userdm.WorkExperienceID) (*userdm.UserWorkExperience, error) {
+	return nil, nil
+}
+
+func (repo *UserRepoImpl) FindSkillBySkillID(userID userdm.UserID, skillID tagdm.TagID) (*userdm.UserSkill, error) {
 	return nil, nil
 }
 

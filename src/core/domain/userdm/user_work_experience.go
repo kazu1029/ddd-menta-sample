@@ -55,3 +55,19 @@ func (we *UserWorkExperience) YearFrom() YearFrom {
 func (we *UserWorkExperience) YearTo() YearTo {
 	return we.yearTo
 }
+
+func (we *UserWorkExperience) ChangeDescription(description string) error {
+	if err := descriptionValidation(description); err != nil {
+		return err
+	}
+	we.description = description
+	return nil
+}
+
+func (we *UserWorkExperience) ChangeYearFrom(yearFrom YearFrom) {
+	we.yearFrom = yearFrom
+}
+
+func (we *UserWorkExperience) ChangeYearTo(yearTo YearTo) {
+	we.yearTo = yearTo
+}
