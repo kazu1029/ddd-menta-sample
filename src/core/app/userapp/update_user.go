@@ -81,7 +81,17 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 		userSkillIDs = append(userSkillIDs, skill.ID)
 	}
 
+	user, err := app.userRepo.FindByID(userID)
+	if err != nil {
+		return nil, err
+	}
+
 	tagDomainService := tagdm.NewTagDomainService(app.tagRepo)
+	var currentSkillsMap map[string]*userdm.UserSkill
+	for _, us := range user.Skills() {
+		currentSkillsMap[us.ID().Value()] = us
+	}
+
 	var userSkills []*userdm.UserSkill
 	for _, skill := range req.Skills {
 		tagID, err := tagdm.NewTagIDWithStr(skill.ID)
@@ -96,24 +106,16 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 			return nil, err
 		}
 		var us *userdm.UserSkill
-		us, err = app.userRepo.FindSkillBySkillID(userID, tagID)
-		if err != nil {
-			return nil, err
-		}
-		if us == nil {
+		us, ok := currentSkillsMap[tagID.Value()]
+		if ok {
+			us.ChangeYearsOfExperience(yoe)
+		} else {
 			us, err = userdm.NewUserSkill(tagID, userID, yoe)
 			if err != nil {
 				return nil, err
 			}
-		} else {
-			us.ChangeYearsOfExperience(yoe)
 		}
 		userSkills = append(userSkills, us)
-	}
-
-	user, err := app.userRepo.FindByID(userID)
-	if err != nil {
-		return nil, err
 	}
 
 	user.ChangeEmail(email)
@@ -131,6 +133,10 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 		return nil, err
 	}
 	var workExperiences []*userdm.UserWorkExperience
+	var currentWorkExpMaps map[string]*userdm.UserWorkExperience
+	for _, we := range user.WorkExperiences() {
+		currentWorkExpMaps[we.ID().Value()] = we
+	}
 	if len(req.WorkExperiences) > 0 {
 		for _, we := range req.WorkExperiences {
 			workExperienceID, err := userdm.NewWorkExperienceIDWithStr(we.ID)
@@ -146,11 +152,15 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 				return nil, err
 			}
 			var experience *userdm.UserWorkExperience
-			experience, err = app.userRepo.FindWorkExperienceByWorkExperienceID(userID, workExperienceID)
-			if err != nil {
-				return nil, err
-			}
-			if experience == nil {
+			experience, ok := currentWorkExpMaps[workExperienceID.Value()]
+			if ok {
+				err = experience.ChangeDescription(we.Description)
+				if err != nil {
+					return nil, err
+				}
+				experience.ChangeYearFrom(yearFrom)
+				experience.ChangeYearTo(yearTo)
+			} else {
 				experience, err = userdm.NewUserWorkExperience(
 					workExperienceID,
 					userID,
@@ -161,13 +171,6 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 				if err != nil {
 					return nil, err
 				}
-			} else {
-				err = experience.ChangeDescription(we.Description)
-				if err != nil {
-					return nil, err
-				}
-				experience.ChangeYearFrom(yearFrom)
-				experience.ChangeYearTo(yearTo)
 			}
 			workExperiences = append(workExperiences, experience)
 		}
