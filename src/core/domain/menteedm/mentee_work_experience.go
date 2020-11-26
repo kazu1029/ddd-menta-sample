@@ -6,7 +6,6 @@ import (
 
 type MenteeWorkExperience struct {
 	id          WorkExperienceID
-	ownerID     MenteeID
 	description string
 	yearFrom    YearFrom
 	yearTo      YearTo
@@ -16,13 +15,12 @@ const (
 	descriptionMaxLength = 1000
 )
 
-func NewMenteeWorkExperience(id WorkExperienceID, ownerID MenteeID, description string, yearFrom YearFrom, yearTo YearTo) (*MenteeWorkExperience, error) {
+func NewMenteeWorkExperience(id WorkExperienceID, description string, yearFrom YearFrom, yearTo YearTo) (*MenteeWorkExperience, error) {
 	if err := descriptionValidation(description); err != nil {
 		return nil, err
 	}
 	return &MenteeWorkExperience{
 		id:          id,
-		ownerID:     ownerID,
 		description: description,
 		yearFrom:    yearFrom,
 		yearTo:      yearTo,
@@ -38,10 +36,6 @@ func descriptionValidation(description string) error {
 
 func (we *MenteeWorkExperience) ID() WorkExperienceID {
 	return we.id
-}
-
-func (we *MenteeWorkExperience) OwnerID() MenteeID {
-	return we.ownerID
 }
 
 func (we *MenteeWorkExperience) Description() string {

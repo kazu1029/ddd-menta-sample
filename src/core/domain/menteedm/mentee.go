@@ -48,7 +48,7 @@ func NewMentee(menteeID MenteeID, menteeName string, email vo.Email, password vo
 
 func menteeNameValidation(menteeName string) error {
 	if menteeName == "" {
-		return xerrors.New("user_name must be set")
+		return xerrors.New("mentee name must be set")
 	}
 
 	if utf8.RuneCountInString(menteeName) > userNameMaxLength {
