@@ -8,20 +8,15 @@ type MenteeSkill struct {
 	yearsOfExperience YearsOfExperience
 }
 
-func NewMenteeSkill(skillID tagdm.TagID, ownerID MenteeID, yearsOfExperience YearsOfExperience) (*MenteeSkill, error) {
+func NewMenteeSkill(skillID tagdm.TagID, yearsOfExperience YearsOfExperience) (*MenteeSkill, error) {
 	return &MenteeSkill{
 		id:                skillID,
-		ownerID:           ownerID,
 		yearsOfExperience: yearsOfExperience,
 	}, nil
 }
 
 func (s *MenteeSkill) ID() tagdm.TagID {
 	return s.id
-}
-
-func (s *MenteeSkill) OwnerID() MenteeID {
-	return s.ownerID
 }
 
 func (s *MenteeSkill) YearsOfExperience() YearsOfExperience {
