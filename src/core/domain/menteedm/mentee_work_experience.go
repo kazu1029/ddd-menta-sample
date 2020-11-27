@@ -1,12 +1,11 @@
-package userdm
+package menteedm
 
 import (
 	"golang.org/x/xerrors"
 )
 
-type UserWorkExperience struct {
+type MenteeWorkExperience struct {
 	id          WorkExperienceID
-	ownerID     UserID
 	description string
 	yearFrom    YearFrom
 	yearTo      YearTo
@@ -16,13 +15,12 @@ const (
 	descriptionMaxLength = 1000
 )
 
-func NewUserWorkExperience(id WorkExperienceID, ownerID UserID, description string, yearFrom YearFrom, yearTo YearTo) (*UserWorkExperience, error) {
+func NewMenteeWorkExperience(id WorkExperienceID, description string, yearFrom YearFrom, yearTo YearTo) (*MenteeWorkExperience, error) {
 	if err := descriptionValidation(description); err != nil {
 		return nil, err
 	}
-	return &UserWorkExperience{
+	return &MenteeWorkExperience{
 		id:          id,
-		ownerID:     ownerID,
 		description: description,
 		yearFrom:    yearFrom,
 		yearTo:      yearTo,
@@ -36,14 +34,10 @@ func descriptionValidation(description string) error {
 	return nil
 }
 
-func (we *UserWorkExperience) ID() WorkExperienceID {
+func (we *MenteeWorkExperience) ID() WorkExperienceID {
 	return we.id
 }
 
-func (we *UserWorkExperience) OwnerID() UserID {
-	return we.ownerID
-}
-
-func (we *UserWorkExperience) Description() string {
+func (we *MenteeWorkExperience) Description() string {
 	return we.description
 }
