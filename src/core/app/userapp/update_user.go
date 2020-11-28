@@ -92,7 +92,7 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 		currentSkillsMap[us.ID().Value()] = us
 	}
 
-	var userSkills []*userdm.UserSkill
+	userSkills := make([]*userdm.UserSkill, len(req.Skills))
 	for _, skill := range req.Skills {
 		tagID, err := tagdm.NewTagIDWithStr(skill.ID)
 		if err != nil {
@@ -132,7 +132,7 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 	if err != nil {
 		return nil, err
 	}
-	var workExperiences []*userdm.UserWorkExperience
+	workExperiences := make([]*userdm.UserWorkExperience, len(req.WorkExperiences))
 	var currentWorkExpMaps map[string]*userdm.UserWorkExperience
 	for _, we := range user.WorkExperiences() {
 		currentWorkExpMaps[we.ID().Value()] = we
