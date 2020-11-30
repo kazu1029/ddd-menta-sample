@@ -92,14 +92,19 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 		currentSkillsMap[us.ID().Value()] = us
 	}
 
+	tagIDs, err := tagdm.NewTagIDs(userSkillIDs)
+	if err != nil {
+		return nil, err
+	}
+	if ok := tagDomainService.ExistsWithIDs(tagIDs); !ok {
+		return nil, xerrors.Errorf("invalid skill ids, %v", tagIDs)
+	}
+
 	userSkills := make([]*userdm.UserSkill, len(req.Skills))
 	for _, skill := range req.Skills {
 		tagID, err := tagdm.NewTagIDWithStr(skill.ID)
 		if err != nil {
 			return nil, err
-		}
-		if ok := tagDomainService.Exists(tagID); !ok {
-			return nil, xerrors.Errorf("invalid skill id, %d", skill.ID)
 		}
 		yoe, err := userdm.NewYearsOfExperience(userdm.YearsOfExperience(skill.YearsOfExperience))
 		if err != nil {
