@@ -1,12 +1,11 @@
-package userdm
+package mentordm
 
 import (
 	"golang.org/x/xerrors"
 )
 
-type UserWorkExperience struct {
+type MentorWorkExperience struct {
 	id          WorkExperienceID
-	ownerID     UserID
 	description string
 	yearFrom    YearFrom
 	yearTo      YearTo
@@ -16,13 +15,12 @@ const (
 	descriptionMaxLength = 1000
 )
 
-func NewUserWorkExperience(id WorkExperienceID, ownerID UserID, description string, yearFrom YearFrom, yearTo YearTo) (*UserWorkExperience, error) {
+func NewMentorWorkExperience(id WorkExperienceID, description string, yearFrom YearFrom, yearTo YearTo) (*MentorWorkExperience, error) {
 	if err := descriptionValidation(description); err != nil {
 		return nil, err
 	}
-	return &UserWorkExperience{
+	return &MentorWorkExperience{
 		id:          id,
-		ownerID:     ownerID,
 		description: description,
 		yearFrom:    yearFrom,
 		yearTo:      yearTo,
@@ -36,27 +34,23 @@ func descriptionValidation(description string) error {
 	return nil
 }
 
-func (we *UserWorkExperience) ID() WorkExperienceID {
+func (we *MentorWorkExperience) ID() WorkExperienceID {
 	return we.id
 }
 
-func (we *UserWorkExperience) OwnerID() UserID {
-	return we.ownerID
-}
-
-func (we *UserWorkExperience) Description() string {
+func (we *MentorWorkExperience) Description() string {
 	return we.description
 }
 
-func (we *UserWorkExperience) YearFrom() YearFrom {
+func (we *MentorWorkExperience) YearFrom() YearFrom {
 	return we.yearFrom
 }
 
-func (we *UserWorkExperience) YearTo() YearTo {
+func (we *MentorWorkExperience) YearTo() YearTo {
 	return we.yearTo
 }
 
-func (we *UserWorkExperience) ChangeDescription(description string) error {
+func (we *MentorWorkExperience) ChangeDescription(description string) error {
 	if err := descriptionValidation(description); err != nil {
 		return err
 	}
@@ -64,10 +58,10 @@ func (we *UserWorkExperience) ChangeDescription(description string) error {
 	return nil
 }
 
-func (we *UserWorkExperience) ChangeYearFrom(yearFrom YearFrom) {
+func (we *MentorWorkExperience) ChangeYearFrom(yearFrom YearFrom) {
 	we.yearFrom = yearFrom
 }
 
-func (we *UserWorkExperience) ChangeYearTo(yearTo YearTo) {
+func (we *MentorWorkExperience) ChangeYearTo(yearTo YearTo) {
 	we.yearTo = yearTo
 }

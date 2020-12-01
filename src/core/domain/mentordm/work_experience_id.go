@@ -1,4 +1,4 @@
-package userdm
+package mentordm
 
 import (
 	"github.com/google/uuid"
