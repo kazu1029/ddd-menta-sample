@@ -76,9 +76,9 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 		return nil, err
 	}
 
-	var userSkillIDs []string
-	for _, skill := range req.Skills {
-		userSkillIDs = append(userSkillIDs, skill.ID)
+	userSkillIDs := make([]string, len(req.Skills))
+	for i := 0; i < len(req.Skills); i++ {
+		userSkillIDs[i] = req.Skills[i].ID
 	}
 
 	user, err := app.userRepo.FindByID(userID)
@@ -87,7 +87,7 @@ func (app *UpdateUserApp) Exec(req *UpdateUserRequest) (*UpdateUserResponse, err
 	}
 
 	tagDomainService := tagdm.NewTagDomainService(app.tagRepo)
-	var currentSkillsMap map[string]*userdm.UserSkill
+	currentSkillsMap := make(map[string]*userdm.UserSkill, len(user.Skills()))
 	for _, us := range user.Skills() {
 		currentSkillsMap[us.ID().Value()] = us
 	}
