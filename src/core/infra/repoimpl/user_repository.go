@@ -14,10 +14,12 @@ var (
 	users []*userdm.User = []*userdm.User{}
 )
 
+// FindByID method return User along with UserSkills and UserWorkExperiences
 func (repo *UserRepoImpl) FindByID(userID userdm.UserID) (*userdm.User, error) {
 	return nil, nil
 }
 
+// Create method saves User with UserSkills and UserWorkExperiences
 func (repo *UserRepoImpl) Create(user userdm.User) (*userdm.User, error) {
 	// This is sample implementation
 	u, err := userdm.NewUser(user.ID(), user.UserName(), user.Email(), user.Password(), user.SelfIntroduction(), user.Skills(), user.WorkExperiences())
@@ -30,6 +32,7 @@ func (repo *UserRepoImpl) Create(user userdm.User) (*userdm.User, error) {
 	return lastInsertedUser, nil
 }
 
+// Update method changes User along with UserSkills and UserWorkExperiences
 func (repo *UserRepoImpl) Update(user userdm.User) (*userdm.User, error) {
 	// TODO: Get target user from users
 

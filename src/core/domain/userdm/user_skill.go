@@ -27,3 +27,7 @@ func (s *UserSkill) OwnerID() UserID {
 func (s *UserSkill) YearsOfExperience() YearsOfExperience {
 	return s.yearsOfExperience
 }
+
+func (s *UserSkill) ChangeYearsOfExperience(yearsOfExperience YearsOfExperience) {
+	s.yearsOfExperience = yearsOfExperience
+}
