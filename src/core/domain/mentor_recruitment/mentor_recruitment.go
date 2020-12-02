@@ -11,8 +11,7 @@ type MentorRecruitment struct {
 	title       string
 	budget      Budget
 	description string
-	// TOOD: add isClosed or status for managing closed or not
-	status Status
+	status      Status
 }
 
 const (
@@ -20,7 +19,7 @@ const (
 	descriptionMinLength = 3000
 )
 
-func NewMentorRecruitment(id MentorRecruitmentID, menteeID menteedm.MenteeID, title string, budget Budget, description string) (*MentorRecruitment, error) {
+func NewMentorRecruitment(id MentorRecruitmentID, menteeID menteedm.MenteeID, title string, budget Budget, description string, status Status) (*MentorRecruitment, error) {
 	if err := titleValidation(title); err != nil {
 		return nil, err
 	}
@@ -35,6 +34,7 @@ func NewMentorRecruitment(id MentorRecruitmentID, menteeID menteedm.MenteeID, ti
 		title:       title,
 		budget:      budget,
 		description: description,
+		status:      status,
 	}, nil
 }
 
@@ -70,4 +70,8 @@ func (mr *MentorRecruitment) Budget() Budget {
 
 func (mr *MentorRecruitment) Description() string {
 	return mr.description
+}
+
+func (mr *MentorRecruitment) Status() Status {
+	return mr.status
 }
