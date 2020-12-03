@@ -5,7 +5,7 @@ import "golang.org/x/xerrors"
 type Status int
 
 const (
-	Draft = iota + 1
+	Draft Status = iota + 1
 	Published
 	Closed
 )
@@ -17,11 +17,19 @@ const (
 )
 
 func NewStatus(status int) (Status, error) {
-	if status < Draft {
-		return Status(0), xerrors.Errorf("status must be over than %d", Draft)
+	if status != int(Draft) && status != int(Published) {
+		return Status(0), xerrors.Errorf("status must be %d or %d", Draft, Published)
 	}
 
-	if status > Closed {
+	return Status(status), nil
+}
+
+func NewStatusForUpdate(status int) (Status, error) {
+	if status < int(Draft) {
+		return Status(0), xerrors.Errorf("status must be over %d", Draft)
+	}
+
+	if status > int(Closed) {
 		return Status(0), xerrors.Errorf("status must be less than %d", Closed)
 	}
 
