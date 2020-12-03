@@ -17,3 +17,7 @@ func (repo *MentorRecruitmentRepoImpl) Create(mentorRecruitment *mentorrecruitme
 	lastInsertedMentorRecruitment := mentorRecruitments[len(mentorRecruitments)-1]
 	return lastInsertedMentorRecruitment, nil
 }
+
+func (repo *MentorRecruitmentRepoImpl) FindAll() ([]*mentor_recruitmentdm.MentorRecruitment, error) {
+	return mentorRecruitments, nil
+}
