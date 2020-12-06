@@ -1,15 +1,15 @@
-package mentor_recruitmentapp
+package mentorrecruitmentapp
 
 import (
 	"github.com/kazu1029/ddd-menta-sample/src/core/domain/menteedm"
-	"github.com/kazu1029/ddd-menta-sample/src/core/domain/mentor_recruitmentdm"
+	"github.com/kazu1029/ddd-menta-sample/src/core/domain/mentorrecruitmentdm"
 )
 
 type CreateMentorRecruitmentApp struct {
-	mRecruitmentRepo mentor_recruitmentdm.MentorRecruitmentRepository
+	mRecruitmentRepo mentorrecruitmentdm.MentorRecruitmentRepository
 }
 
-func NewCreateMentorRecruitmentApp(mRecruitmentRepo mentor_recruitmentdm.MentorRecruitmentRepository) *CreateMentorRecruitmentApp {
+func NewCreateMentorRecruitmentApp(mRecruitmentRepo mentorrecruitmentdm.MentorRecruitmentRepository) *CreateMentorRecruitmentApp {
 	return &CreateMentorRecruitmentApp{
 		mRecruitmentRepo: mRecruitmentRepo,
 	}
@@ -36,19 +36,19 @@ func (app *CreateMentorRecruitmentApp) Exec(req *CreateMentorRecruitmentRequest)
 		return nil, err
 	}
 
-	budget, err := mentor_recruitmentdm.NewBudget(req.Budget.Fee, req.Budget.IsSubscription)
+	budget, err := mentorrecruitmentdm.NewBudget(req.Budget.Fee, req.Budget.IsSubscription)
 	if err != nil {
 		return nil, err
 	}
 
-	status, err := mentor_recruitmentdm.NewStatus(req.Status)
+	status, err := mentorrecruitmentdm.NewStatus(req.Status)
 	if err != nil {
 		return nil, err
 	}
 
-	mentorRecruitmentID := mentor_recruitmentdm.NewMentorRecruitmentID()
+	mentorRecruitmentID := mentorrecruitmentdm.NewMentorRecruitmentID()
 
-	mentorRecruitment, err := mentor_recruitmentdm.NewMentorRecruitment(
+	mentorRecruitment, err := mentorrecruitmentdm.NewMentorRecruitment(
 		mentorRecruitmentID,
 		menteeID,
 		req.Title,

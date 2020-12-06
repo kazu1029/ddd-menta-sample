@@ -1,4 +1,4 @@
-package mentor_recruitmentdm
+package mentorrecruitmentdm
 
 import (
 	"github.com/google/uuid"

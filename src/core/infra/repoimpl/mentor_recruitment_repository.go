@@ -1,6 +1,6 @@
 package repoimpl
 
-import "github.com/kazu1029/ddd-menta-sample/src/core/domain/mentor_recruitmentdm"
+import "github.com/kazu1029/ddd-menta-sample/src/core/domain/mentorrecruitmentdm"
 
 type MentorRecruitmentRepoImpl struct{}
 
@@ -9,10 +9,10 @@ func NewMentorRecruitmentRepoImpl() *MentorRecruitmentRepoImpl {
 }
 
 var (
-	mentorRecruitments []*mentor_recruitmentdm.MentorRecruitment = []*mentor_recruitmentdm.MentorRecruitment{}
+	mentorRecruitments []*mentorrecruitmentdm.MentorRecruitment = []*mentorrecruitmentdm.MentorRecruitment{}
 )
 
-func (repo *MentorRecruitmentRepoImpl) Create(mentorRecruitment *mentor_recruitmentdm.MentorRecruitment) (*mentor_recruitmentdm.MentorRecruitment, error) {
+func (repo *MentorRecruitmentRepoImpl) Create(mentorRecruitment *mentorrecruitmentdm.MentorRecruitment) (*mentorrecruitmentdm.MentorRecruitment, error) {
 	mentorRecruitments = append(mentorRecruitments, mentorRecruitment)
 	lastInsertedMentorRecruitment := mentorRecruitments[len(mentorRecruitments)-1]
 	return lastInsertedMentorRecruitment, nil

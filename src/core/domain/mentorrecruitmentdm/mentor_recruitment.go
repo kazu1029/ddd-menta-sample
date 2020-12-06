@@ -1,4 +1,4 @@
-package mentor_recruitmentdm
+package mentorrecruitmentdm
 
 import (
 	"github.com/kazu1029/ddd-menta-sample/src/core/domain/menteedm"
