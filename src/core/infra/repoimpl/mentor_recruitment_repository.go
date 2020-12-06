@@ -18,6 +18,6 @@ func (repo *MentorRecruitmentRepoImpl) Create(mentorRecruitment *mentorrecruitme
 	return lastInsertedMentorRecruitment, nil
 }
 
-func (repo *MentorRecruitmentRepoImpl) FindAll() ([]*mentor_recruitmentdm.MentorRecruitment, error) {
+func (repo *MentorRecruitmentRepoImpl) FindAll() ([]*mentorrecruitmentdm.MentorRecruitment, error) {
 	return mentorRecruitments, nil
 }

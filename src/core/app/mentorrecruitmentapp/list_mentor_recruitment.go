@@ -1,25 +1,13 @@
-package mentor_recruitmentapp
-
-import "github.com/kazu1029/ddd-menta-sample/src/core/domain/mentor_recruitmentdm"
+package mentorrecruitmentapp
 
 type ListMentorRecruitmentApp struct {
-	mrService mentor_recruitmentdm.MentorRecruitmentDomainService
+	mrService MentorRecruitmentQueryService
 }
 
-func NewListMentorRecruitmentApp(mrService mentor_recruitmentdm.MentorRecruitmentDomainService) *ListMentorRecruitmentApp {
+func NewListMentorRecruitmentApp(mrService MentorRecruitmentQueryService) *ListMentorRecruitmentApp {
 	return &ListMentorRecruitmentApp{
 		mrService: mrService,
 	}
-}
-
-type ListMentorRecruitmentItem struct {
-	ID             string
-	MenteeID       string
-	Title          string
-	Fee            int
-	IsSubscription bool
-	Description    string
-	Status         string
 }
 
 func (app *ListMentorRecruitmentApp) Exec() ([]*ListMentorRecruitmentItem, error) {
