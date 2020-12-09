@@ -16,7 +16,7 @@ type Plan struct {
 	isSubscription bool
 	price          Price
 	categoryIDs    []categorydm.CategoryID
-	tagIDs         []tagdm.TagID
+	skillIDs       []tagdm.TagID
 }
 
 const (
@@ -24,7 +24,7 @@ const (
 	descriptionMinLength = 3000
 )
 
-func NewPlan(id PlanID, mentorID mentordm.MentorID, title string, description string, status Status, isSbuscription bool, price Price, categoryIDs []categorydm.CategoryID, tagIDs []tagdm.TagID) (*Plan, error) {
+func NewPlan(id PlanID, mentorID mentordm.MentorID, title string, description string, status Status, isSbuscription bool, price Price, categoryIDs []categorydm.CategoryID, skillIDs []tagdm.TagID) (*Plan, error) {
 	if err := titleValidation(title); err != nil {
 		return nil, err
 	}
@@ -42,7 +42,7 @@ func NewPlan(id PlanID, mentorID mentordm.MentorID, title string, description st
 		isSubscription: isSbuscription,
 		price:          price,
 		categoryIDs:    categoryIDs,
-		tagIDs:         tagIDs,
+		skillIDs:       skillIDs,
 	}, nil
 }
 
@@ -92,6 +92,6 @@ func (p *Plan) CategoryIDs() []categorydm.CategoryID {
 	return p.categoryIDs
 }
 
-func (p *Plan) TagIDs() []tagdm.TagID {
-	return p.tagIDs
+func (p *Plan) SkillIDs() []tagdm.TagID {
+	return p.skillIDs
 }
