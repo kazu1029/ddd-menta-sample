@@ -64,7 +64,7 @@ func (p *Plan) ID() PlanID {
 	return p.id
 }
 
-func (p *Plan) MenteeID() mentordm.MentorID {
+func (p *Plan) MentorID() mentordm.MentorID {
 	return p.mentorID
 }
 
