@@ -1,7 +1,14 @@
 package mentorplanapp
 
+import (
+	"github.com/kazu1029/ddd-menta-sample/src/core/domain/categorydm"
+	"github.com/kazu1029/ddd-menta-sample/src/core/domain/tagdm"
+)
+
 type ListMentorPlanApp struct {
-	mpService MentorPlanQueryService
+	mpService    MentorPlanQueryService
+	categoryRepo categorydm.CategoryRepository
+	tagRepo      tagdm.TagRepository
 }
 
 type ListMentorPlanItemRequest struct {
@@ -9,9 +16,11 @@ type ListMentorPlanItemRequest struct {
 	Limit uint
 }
 
-func NewListMentorPlanApp(mpService MentorPlanQueryService) *ListMentorPlanApp {
+func NewListMentorPlanApp(mpService MentorPlanQueryService, categoryRepo categorydm.CategoryRepository, tagRepo tagdm.TagRepository) *ListMentorPlanApp {
 	return &ListMentorPlanApp{
-		mpService: mpService,
+		mpService:    mpService,
+		categoryRepo: categoryRepo,
+		tagRepo:      tagRepo,
 	}
 }
 
@@ -20,9 +29,33 @@ func (app *ListMentorPlanApp) Exec(req *ListMentorPlanItemRequest) ([]*ListMento
 	if err != nil {
 		return nil, err
 	}
+	masterCategories, err := app.categoryRepo.FindAll()
+	if err != nil {
+		return nil, err
+	}
+	masterCategoriesMap := makeMasterCategoryMap(masterCategories)
+	masterTags, err := app.tagRepo.FindAll()
+	if err != nil {
+		return nil, err
+	}
+	masterTagMap := makeMasterTagMap(masterTags)
 	mpList := make([]*ListMentorPlanItem, len(mentorPlans))
 	for i, v := range mentorPlans {
-		// Categories and Skills are needed to get from domain service.
+		categories := make([]ListMentorPlanCategoryItem, len(v.CategoryIDs()))
+		for j, category := range v.CategoryIDs() {
+			categories[j] = ListMentorPlanCategoryItem{
+				ID:   category.Value(),
+				Name: masterCategoriesMap[category.Value()],
+			}
+		}
+		skills := make([]ListMentorPlanSkillItem, len(v.SkillIDs()))
+		for j, tag := range v.SkillIDs() {
+			skills[j] = ListMentorPlanSkillItem{
+				ID:   tag.Value(),
+				Name: masterTagMap[tag.Value()],
+			}
+		}
+
 		mpList[i] = &ListMentorPlanItem{
 			ID:             v.ID().Value(),
 			MentorID:       v.MentorID().Value(),
@@ -30,6 +63,27 @@ func (app *ListMentorPlanApp) Exec(req *ListMentorPlanItemRequest) ([]*ListMento
 			Description:    v.Description(),
 			IsSubscription: v.IsSubScription(),
 			Status:         v.Status().String(),
+			Price:          v.Price().Value(),
+			Categories:     categories,
+			Skills:         skills,
 		}
 	}
+
+	return mpList, nil
+}
+
+func makeMasterCategoryMap(categories []*categorydm.Category) map[string]string {
+	cmap := make(map[string]string, len(categories))
+	for _, v := range categories {
+		cmap[v.ID().Value()] = v.Name()
+	}
+	return cmap
+}
+
+func makeMasterTagMap(tags []*tagdm.Tag) map[string]string {
+	tmap := make(map[string]string, len(tags))
+	for _, v := range tags {
+		tmap[v.ID().Value()] = v.Name()
+	}
+	return tmap
 }

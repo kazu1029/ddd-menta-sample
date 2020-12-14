@@ -1,6 +1,8 @@
 package repoimpl
 
 import (
+	"strconv"
+
 	"github.com/kazu1029/ddd-menta-sample/src/core/domain/tagdm"
 )
 
@@ -15,16 +17,16 @@ var (
 )
 
 func init() {
-	tag1, _ := tagdm.NewTag(tagdm.TagID("id1"), "Go")
-	tag2, _ := tagdm.NewTag(tagdm.TagID("id2"), "PHP")
-	tag3, _ := tagdm.NewTag(tagdm.TagID("id3"), "AWS")
-	tag4, _ := tagdm.NewTag(tagdm.TagID("id4"), "JavaScript")
-	tag5, _ := tagdm.NewTag(tagdm.TagID("id5"), "GCP")
-	tags["id1"] = tag1
-	tags["id2"] = tag2
-	tags["id3"] = tag3
-	tags["id4"] = tag4
-	tags["id5"] = tag5
+	tag1, _ := tagdm.NewTag(tagdm.TagID("id0"), "Go")
+	tag2, _ := tagdm.NewTag(tagdm.TagID("id1"), "PHP")
+	tag3, _ := tagdm.NewTag(tagdm.TagID("id2"), "AWS")
+	tag4, _ := tagdm.NewTag(tagdm.TagID("id3"), "JavaScript")
+	tag5, _ := tagdm.NewTag(tagdm.TagID("id4"), "GCP")
+	tags["id0"] = tag1
+	tags["id1"] = tag2
+	tags["id2"] = tag3
+	tags["id3"] = tag4
+	tags["idd4"] = tag5
 }
 
 func (repo *TagRepoImpl) FindByID(tagID tagdm.TagID) (*tagdm.Tag, error) {
@@ -39,4 +41,12 @@ func (repo *TagRepoImpl) FindByIDs(tagIDs []tagdm.TagID) ([]*tagdm.Tag, error) {
 		}
 	}
 	return fetchedTags, nil
+}
+
+func (repo *TagRepoImpl) FindAll() ([]*tagdm.Tag, error) {
+	tagSlice := make([]*tagdm.Tag, len(tags))
+	for i := 0; i < len(categories); i++ {
+		tagSlice[i] = tags["id"+strconv.Itoa(i)]
+	}
+	return tagSlice, nil
 }
