@@ -25,5 +25,5 @@ type ListMentorPlanSkillItem struct {
 }
 
 type MentorPlanQueryService interface {
-	FindAll(uint, uint) ([]*plandm.Plan, error)
+	FindAllByStatus(int, uint, uint) ([]*plandm.Plan, error)
 }

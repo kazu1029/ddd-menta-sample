@@ -5,6 +5,10 @@ import (
 	"github.com/kazu1029/ddd-menta-sample/src/core/domain/tagdm"
 )
 
+var (
+	pageLimit uint = 20
+)
+
 type ListMentorPlanApp struct {
 	mpService    MentorPlanQueryService
 	categoryRepo categorydm.CategoryRepository
@@ -12,8 +16,9 @@ type ListMentorPlanApp struct {
 }
 
 type ListMentorPlanItemRequest struct {
-	Page  uint
-	Limit uint
+	Status int
+	Page   uint
+	// Limit  uint
 }
 
 func NewListMentorPlanApp(mpService MentorPlanQueryService, categoryRepo categorydm.CategoryRepository, tagRepo tagdm.TagRepository) *ListMentorPlanApp {
@@ -25,7 +30,7 @@ func NewListMentorPlanApp(mpService MentorPlanQueryService, categoryRepo categor
 }
 
 func (app *ListMentorPlanApp) Exec(req *ListMentorPlanItemRequest) ([]*ListMentorPlanItem, error) {
-	mentorPlans, err := app.mpService.FindAll(req.Page, req.Limit)
+	mentorPlans, err := app.mpService.FindAllByStatus(req.Status, req.Page, pageLimit)
 	if err != nil {
 		return nil, err
 	}
