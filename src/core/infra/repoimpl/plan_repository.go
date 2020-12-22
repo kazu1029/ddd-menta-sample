@@ -17,3 +17,7 @@ func (repo *PlanRepoImpl) Create(plan *plandm.Plan) (*plandm.Plan, error) {
 	lastInsertedPlan := plans[len(plans)-1]
 	return lastInsertedPlan, nil
 }
+
+func (repo *PlanRepoImpl) FindByID(planID plandm.PlanID) (*plandm.Plan, error) {
+	return nil, nil
+}

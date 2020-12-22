@@ -4,15 +4,20 @@ import (
 	"github.com/kazu1029/ddd-menta-sample/src/core/domain/menteedm"
 	"github.com/kazu1029/ddd-menta-sample/src/core/domain/planapplicationdm"
 	"github.com/kazu1029/ddd-menta-sample/src/core/domain/plandm"
+	"golang.org/x/xerrors"
 )
 
 type CreatePlanApplicationApp struct {
 	pApplicationRepo planapplicationdm.PlanApplicationRepository
+	planRepo         plandm.PlanRepository
+	menteeRepo       menteedm.MenteeRepository
 }
 
-func NewCreawtePlanApplicationApp(pApplicationRepo planapplicationdm.PlanApplicationRepository) *CreatePlanApplicationApp {
+func NewCreawtePlanApplicationApp(pApplicationRepo planapplicationdm.PlanApplicationRepository, planRepo plandm.PlanRepository, menteeRepo menteedm.MenteeRepository) *CreatePlanApplicationApp {
 	return &CreatePlanApplicationApp{
 		pApplicationRepo: pApplicationRepo,
+		planRepo:         planRepo,
+		menteeRepo:       menteeRepo,
 	}
 }
 
@@ -30,10 +35,19 @@ func (app *CreatePlanApplicationApp) Exec(req *CreatePlanApplicationRequest) (*C
 	if err != nil {
 		return nil, err
 	}
+	planDomainService := plandm.NewPlanDomainService(app.planRepo)
+	if ok := planDomainService.Exists(planID); !ok {
+		return nil, xerrors.Errorf("plan id is invalid: %s", planID)
+	}
 
 	menteeID, err := menteedm.NewMenteeIDWithStr(req.MenteeID)
 	if err != nil {
 		return nil, err
+	}
+
+	menteeDomainService := menteedm.NewMenteeDomainService(app.menteeRepo)
+	if ok := menteeDomainService.Exists(menteeID); !ok {
+		return nil, xerrors.Errorf("mentee ID is invalid: %s", menteeID)
 	}
 
 	status := planapplicationdm.NewStatus()
