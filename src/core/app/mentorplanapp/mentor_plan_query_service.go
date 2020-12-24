@@ -1,6 +1,8 @@
 package mentorplanapp
 
-import "github.com/kazu1029/ddd-menta-sample/src/core/domain/plandm"
+import (
+	"github.com/kazu1029/ddd-menta-sample/src/core/infra/queryserviceimpl"
+)
 
 type ListMentorPlanItem struct {
 	ID             string
@@ -25,5 +27,5 @@ type ListMentorPlanSkillItem struct {
 }
 
 type MentorPlanQueryService interface {
-	FindAllByStatus(int, uint, uint) ([]*plandm.Plan, error)
+	FindAllByStatus(int, uint, uint) ([]*queryserviceimpl.ListMentorPlanItem, error)
 }
