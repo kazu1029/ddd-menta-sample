@@ -36,7 +36,7 @@ func (app *CreatePlanApplicationApp) Exec(req *CreatePlanApplicationRequest) (*C
 		return nil, err
 	}
 	planDomainService := plandm.NewPlanDomainService(app.planRepo)
-	if ok := planDomainService.Exists(planID); !ok {
+	if !planDomainService.Exists(planID) {
 		return nil, xerrors.Errorf("plan id is invalid: %s", planID)
 	}
 
@@ -46,7 +46,7 @@ func (app *CreatePlanApplicationApp) Exec(req *CreatePlanApplicationRequest) (*C
 	}
 
 	menteeDomainService := menteedm.NewMenteeDomainService(app.menteeRepo)
-	if ok := menteeDomainService.Exists(menteeID); !ok {
+	if !menteeDomainService.Exists(menteeID) {
 		return nil, xerrors.Errorf("mentee ID is invalid: %s", menteeID)
 	}
 
